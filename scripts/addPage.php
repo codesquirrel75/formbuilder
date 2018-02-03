@@ -2,14 +2,15 @@
 
 session_start();  // start session
 
-$pageNumber = sizeof($_SESSION['form']) + 1;
-while(isset($_SESSION['form']['page' . $pageNumber]))
-{
-	$pageNumber = $pageNumber + 1;
-}
+include 'functions.php';
 
-$_SESSION['form']['page' . $pageNumber]['section1']['fields'] = array();
+$pageNumber = pageNumber();
+
+
+$_SESSION['form']['pages']['page' . $pageNumber] = array('pageName'=>'page ' . $pageNumber, 'sections'=>array('section1'=>array('sectionName'=>'section 1', 'fields'=>array())));
 
 header("Location:../index.php");
 
 ?>
+
+

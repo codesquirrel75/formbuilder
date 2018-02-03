@@ -1,80 +1,37 @@
 <?php
 session_start();  // start session
 
+// Check for the page setup array
+if(!isset($_SESSION['form']['page1']))
+{
+	$_SESSION['form']['page1']['section1']['fields'] = array();
+}
+
+// Check for Session fields variable
+if(!isset($_SESSION['form']['page1']['section1']['fields']))
+{
+ 	// initialize Session fields as an empty array
+ 	echo "fields isn't set";
+}
 
 // Check for Session selectedField
 if(!isset($_SESSION['selectedField']))
 {
 	// initialize Session selectedField
-	$_SESSION['selectedField'] = 'field1';
+	$_SESSION['selectedField'] = '';
 }
 
 //  Check for Session selectedPage
 if(!isset($_SESSION['selectedPage']))
 {
 	//  initialize Session selectPage
-	$_SESSION['selectedPage'] = 'page1';
-	
+	$_SESSION['selectedPage'] = key($_SESSION['form']);
 }
-
-// Check for selected section
-if(!isset($_SESSION['selectedSection']))
-{
-	//  initialize Session selectedSection
-	$_SESSION['selectedSection'] = 'section1';
-	
-}
-
-//  functions to set page and section numbers
-
-include 'scripts/functions.php';
-
-// Check for the page setup array
-if(!isset($_SESSION['form']['pages']))
-{
-	$_SESSION['form'] = array('formName'=>'form' . (sizeof(scandir('forms'))-1), 'pages'=>array('page' . pageNumber() =>array('pageName'=>'page' . pageNumber(), 'sections'=>array('section' . sectionNumber() =>array('sectionName'=>'section' . sectionNumber(), 'fields'=>array())))));
-
-	$_SESSION['selectedPage'] = key($_SESSION['form']['pages']);
-
-}
-
-// Check for empty pages
-if(sizeof($_SESSION['form']['pages']) == 0)
-{
-	$_SESSION['form']['pages']['page1'] = array('pageName'=>'page 1', 'sections'=>array('section1'=>array('sectionName'=>'section 1', 'fields'=>array())));
-	
-}
-
-// Check for empty sections
-if(sizeof($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']) == 0)
-{
-	$_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']['section1'] = array('sectionName'=>'section 1', 'fields'=>array());
-	
-}
-
-
-// Check for Session fields variable
-if(!isset($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']))
-{
- 	// initialize Session fields as an empty array
- 	echo "fields isn't set";
-}
-
-
 
 //   Testing outputs 
-/*
-echo "<br>";
-print_r($_SESSION['form']['pages']);
-echo "<br>";
-echo count($_SESSION['form']['pages']) == 0;
-echo "<br>";
-echo sizeof($_SESSION['form']['pages']);
-echo "<br>";
-echo $_SESSION['selectedSection'];
-echo "<br>";
-echo $_SESSION['selectedField'];
-*/
+
+
+
 //  End Testing
 
 ?>
@@ -243,7 +200,7 @@ echo $_SESSION['selectedField'];
 						</div>
 						<div class="card-body">
 							<?php
-								foreach($_SESSION['form']['pages'] as $key=>$page)
+								foreach($_SESSION['form'] as $key=>$page)
 								{
 									if($_SESSION['selectedPage'] === $key)
 										{
@@ -296,13 +253,13 @@ echo $_SESSION['selectedField'];
 						</div>	
 						<div class="card-body">
 							<?php
-								if(sizeof($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']) == 0)
+								if(sizeof($_SESSION['form'][$_SESSION['selectedPage']]['section1']['fields']) == 0)
 								{
 									echo "<div class='alert alert-warning' role='alert' style='text-align: left;'><B>No Fields selected</B>		  </div>";
 								}
 								else
 								{
-									foreach($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields'] as $key=>$field)
+									foreach($_SESSION['form'][$_SESSION['selectedPage']]['section1']['fields'] as $key=>$field)
 									{
 										$key2 = "$key";
 										if($_SESSION['selectedField'] === $key2)
@@ -413,14 +370,14 @@ echo $_SESSION['selectedField'];
 						  		</div>
 						  		<div class="col">
 								    <div class="btn-group" role="group" aria-label="Basic example">
-										<form method="post" action="scripts/addSection.php">
+										<form method="post" action="addSection">
 									  		<button type="submit" class="fa fa-plus-square btn btn-outline-primary"></button>
 										</form>
 										<form>
 											<button type="button" class="fa fa-pencil-square-o btn btn-outline-secondary" data-toggle="modal" data-target="#editSection"></button>
 										</form>
-										<form method="post" action="scripts/removeSection.php">
-									  		<button type="submit" class="fa fa-minus-square btn btn-outline-danger"></button>
+										<form method="post" action="removeSection">
+									  		<button type="button" class="fa fa-minus-square btn btn-outline-danger"></button>
 										</form>
 
 									</div>
@@ -429,28 +386,9 @@ echo $_SESSION['selectedField'];
 						</div>
 					</div>
 					<div class="card-body">
-					  	
-						<?php
-								foreach($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'] as $key=>$section)
-								{
-									if($_SESSION['selectedSection'] === $key)
-										{
-											$type = "alert-primary";
-										}
-										else
-										{
-											$type = "alert-success";
-										}
-
-								echo 
-										'<form method="post" action="scripts/selectSection.php">
-								  		<input type="hidden" name="sectionIndex" value="' . $key . '">
-									  	<button type="submit" class="alert ' . $type . ' btn-lg btn-block text-left" role="alert" style="text-align: left;">
-										  <B>' . $key . '</B>
-										</button>
-									</form>';
-								}	
-							?>
+					  	<div class="alert alert-success" role="alert" style="text-align: left;">
+						  <B>Section 1</B>
+						</div>
 					</div>
 				</div>
 <!-- End of Card 3 (SECTIONS)  -->
