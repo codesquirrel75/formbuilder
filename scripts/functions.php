@@ -38,4 +38,23 @@ function sectionNumber()
 	return $sectionNumber;
 }
 
+function fieldNumber()
+{
+	$fieldNumber = 1;
+
+	if(!isset($_SESSION['form']))
+	{
+		$fieldNumber = 1;
+	}
+	else
+	{
+		while(array_key_exists('field'. $fieldNumber, $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']))
+		{
+			$fieldNumber = $fieldNumber +1;
+		}		
+	}
+
+	return $fieldNumber;
+}
+
 ?>

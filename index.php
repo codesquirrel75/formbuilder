@@ -35,20 +35,23 @@ if(!isset($_SESSION['form']['pages']))
 	$_SESSION['form'] = array('formName'=>'form' . (sizeof(scandir('forms'))-1), 'pages'=>array('page' . pageNumber() =>array('pageName'=>'page' . pageNumber(), 'sections'=>array('section' . sectionNumber() =>array('sectionName'=>'section' . sectionNumber(), 'fields'=>array())))));
 
 	$_SESSION['selectedPage'] = key($_SESSION['form']['pages']);
+	$_SESSION['pageIndex'] = array_search($_SESSION['selectedPage'],array_keys($_SESSION['form']['pages']));
+	$_SESSION['selectedSection'] = key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']);
+	$_SESSION['sectionIndex'] = array_search($_SESSION['selectedSection'],array_keys($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']));
 
 }
 
 // Check for empty pages
 if(sizeof($_SESSION['form']['pages']) == 0)
 {
-	$_SESSION['form']['pages']['page1'] = array('pageName'=>'page 1', 'sections'=>array('section1'=>array('sectionName'=>'section 1', 'fields'=>array())));
+	$_SESSION['form']['pages'] = array('page1'=>array('pageName'=>'page 1', 'sections'=>array('section1'=>array('sectionName'=>'section 1', 'fields'=>array()))));
 	
 }
 
 // Check for empty sections
 if(sizeof($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']) == 0)
 {
-	$_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']['section1'] = array('sectionName'=>'section 1', 'fields'=>array());
+	$_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'] = array('section1'=>array('sectionName'=>'section 1', 'fields'=>array()));
 	
 }
 
@@ -65,16 +68,24 @@ if(!isset($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SE
 //   Testing outputs 
 /*
 echo "<br>";
-print_r($_SESSION['form']['pages']);
-echo "<br>";
-echo count($_SESSION['form']['pages']) == 0;
-echo "<br>";
+echo "<strong>size of pages</strong>";
 echo sizeof($_SESSION['form']['pages']);
+
 echo "<br>";
-echo $_SESSION['selectedSection'];
+echo "<strong>size of page sections</strong>";
+echo sizeof($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']);
+
 echo "<br>";
-echo $_SESSION['selectedField'];
+echo "Page Index: " . $_SESSION['pageIndex'];
+
+echo "<br>";
+echo "Section Index: " . $_SESSION['sectionIndex'];
+
+
+echo "<br>";
+print_r($_SESSION['form'])
 */
+
 //  End Testing
 
 ?>
@@ -232,6 +243,9 @@ echo $_SESSION['selectedField'];
 									    	<form method="post" action="scripts/addPage.php">	
 										  <button type="submit" class="fa fa-plus-square btn btn-outline-primary"></button>
 											</form>	
+											<form>
+											<button type="button" class="fa fa-pencil-square-o btn btn-outline-secondary" data-toggle="modal" data-target="#editPage"></button>
+										</form>
 											<form method="post" action="scripts/removePage.php">
 										  <button type="submit" class="fa fa-minus-square btn btn-outline-danger"></button>
 											</form>
@@ -258,7 +272,7 @@ echo $_SESSION['selectedField'];
 										'<form method="post" action="scripts/selectPage.php">
 								  		<input type="hidden" name="pageIndex" value="' . $key . '">
 									  	<button type="submit" class="alert ' . $type . ' btn-lg btn-block text-left" role="alert" style="text-align: left;">
-										  <B>' . $key . '</B><i class="fa fa-pencil"></i>
+										  <B>' . $_SESSION['form']['pages'][$key]['pageName'] . '</B>
 										</button>
 									</form>';
 								}	
@@ -283,7 +297,7 @@ echo $_SESSION['selectedField'];
 							  			
 							  			<form method="post" action="scripts/removeField.php">
 							  				<div class="btn-group" role="group"> 	
-										  		<button type="button" class="fa fa-plus-square btn btn-outline-primary" data-toggle="modal" data-target="#fieldsModal"></button>
+										  		<button type="button" class="fa fa-plus-square btn btn-outline-primary" data-toggle="modal" data-target="#fieldsModal"></button>										  		
 										  		<button type="submit" class="fa fa-minus-square btn btn-outline-danger"></button>
 									     							
 											</div>  
@@ -304,6 +318,8 @@ echo $_SESSION['selectedField'];
 								{
 									foreach($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields'] as $key=>$field)
 									{
+										
+
 										$key2 = "$key";
 										if($_SESSION['selectedField'] === $key2)
 										{
@@ -314,7 +330,7 @@ echo $_SESSION['selectedField'];
 											$type = "alert-success";
 										}
 
-										if($field == "text")
+										if($field['fieldType'] == "text")
 										{
 											echo '
 											<form method="post" action="scripts/selectField.php">
@@ -323,7 +339,7 @@ echo $_SESSION['selectedField'];
 									      	</form>
 									      	';
 										}
-										elseif($field == "numeric")
+										elseif($field['fieldType'] == "numeric")
 										{
 											echo '
 											<form method="post" action="scripts/selectField.php">
@@ -332,7 +348,7 @@ echo $_SESSION['selectedField'];
 									      	</form>
 									      	';
 										}
-										elseif($field == "photo")
+										elseif($field['fieldType'] == "photo")
 										{
 											echo '
 											<form method="post" action="scripts/selectField.php">
@@ -341,7 +357,7 @@ echo $_SESSION['selectedField'];
 									      	</form>
 									      	';
 										}
-										elseif($field == "statictext")
+										elseif($field['fieldType'] == "statictext")
 										{
 											echo '
 											<form method="post" action="scripts/selectField.php">
@@ -350,7 +366,7 @@ echo $_SESSION['selectedField'];
 									      	</form>
 									      	';
 										}
-										elseif($field == "optionlist")
+										elseif($field['fieldType'] == "optionlist")
 										{
 											echo '
 											<form method="post" action="scripts/selectField.php">
@@ -359,7 +375,7 @@ echo $_SESSION['selectedField'];
 									      	</form>
 									      	';
 										}
-										elseif($field == "yesnona")
+										elseif($field['fieldType'] == "yesnona")
 										{
 											echo '
 											<form method="post" action="scripts/selectField.php">
@@ -386,6 +402,15 @@ echo $_SESSION['selectedField'];
 			<div class="col-md-4">
 				<div class="card">
   					<div class="card-body">
+  						<?php
+  						if(sizeof($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']) > 0)
+  						{
+	  						foreach($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields'][$_SESSION['selectedField']] as $key=>$property)
+	  						{
+	  							echo "<strong>" . strtoupper($key) . "</strong> " . $property . "<br>";
+	  						}
+						}
+  						?>
    						
 					</div>
 				</div>
@@ -446,7 +471,7 @@ echo $_SESSION['selectedField'];
 										'<form method="post" action="scripts/selectSection.php">
 								  		<input type="hidden" name="sectionIndex" value="' . $key . '">
 									  	<button type="submit" class="alert ' . $type . ' btn-lg btn-block text-left" role="alert" style="text-align: left;">
-										  <B>' . $key . '</B>
+										  <B>' . $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$key]['sectionName'] . '</B>
 										</button>
 									</form>';
 								}	
@@ -548,7 +573,7 @@ echo $_SESSION['selectedField'];
       <form method="post" action="scripts/editSection.php">
       <div class="modal-body">
 
-      	<label>Section Header</label>
+      	<label>Section Name</label>
       	<input type="text" name="header">
       		
       	
@@ -564,6 +589,38 @@ echo $_SESSION['selectedField'];
 </div>
 
 <!-- End Section Edit Modal  -->
+
+<!-- Page Edit Modal  -->
+
+<!-- Modal -->
+<div class="modal fade" id="editPage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Page</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post" action="scripts/editPage.php">
+      <div class="modal-body">
+
+      	<label>Page Name: </label>
+      	<input type="text" name="newName">
+      		
+      	
+        
+      </div>
+      <div class="modal-footer">
+      	<button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>        
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- End Page Edit Modal  -->
 
 
 	

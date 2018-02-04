@@ -1,10 +1,8 @@
 <?php
 session_start();  // start session
-$newHeader = $_POST['header'];
+$newName = $_POST['header'];
 
-$_SESSION['form'][$_SESSION['pageSelected']][$newHeader] = $_SESSION['form'][$_SESSION['pageSelected']][$_SESSION['sectionSelected']];
-unset($_SESSION['form'][$_SESSION['pageSelected']][$_SESSION['sectionSelected']]);
-
+$_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['sectionName'] = $newName;
 
 header("Location:../index.php");
 
