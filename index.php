@@ -402,15 +402,26 @@ print_r($_SESSION['form'])
 			<div class="col-md-4">
 				<div class="card">
   					<div class="card-body">
-  						<?php
-  						if(sizeof($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']) > 0)
-  						{
-	  						foreach($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields'][$_SESSION['selectedField']] as $key=>$property)
-	  						{
-	  							echo "<strong>" . strtoupper($key) . "</strong> " . $property . "<br>";
-	  						}
-						}
-  						?>
+  						<div class="container">
+  							
+  								
+							<?php
+		  						if(sizeof($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']) > 0)
+		  						{
+		  							$field = $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields'][$_SESSION['selectedField']];
+			  						foreach( $field as $key=>$property)
+			  						{
+			  							echo "<div class='row'>";
+			  							echo "<div class='col-md-5 text-left'><strong>" . strtoupper($key) . "</strong></div>"; 				
+			  							echo "<div class='col-md-4 text-left'>" . $property . "</div>";			  							
+			  							echo "</div>";
+			  						}
+								}
+		  					?>
+  								
+  							
+  						</div>
+  						
    						
 					</div>
 				</div>
