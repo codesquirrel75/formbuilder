@@ -7,7 +7,7 @@ reset($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSIO
 
 if($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields'] >= 0)
 {
-	$_SESSION['selectedfield'] = 'field1';
+	$_SESSION['selectedField'] = key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']);
 }
 
 header("Location:../index.php");

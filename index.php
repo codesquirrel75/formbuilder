@@ -511,30 +511,34 @@ print_r($_SESSION['form'])
       </div>
       <div class="modal-body">
       	<form method="post" action="scripts/addField.php">
-      		<input type="hidden" name="field" value="text">
-      		<button name="submit" value="True" type="submit" class="btn btn-outline-secondary btn-lg btn-block text-left" ><h6 class="btn btn-secondary"> ABC...</h6> Text</button>
-      	</form>
-      	<form method="post" action="scripts/addField.php">
-      		<input type="hidden" name="field" value="statictext">
-      		<button name="submit" type="submit" class="btn btn-outline-secondary btn-lg btn-block text-left"><i class="btn btn-secondary fa fa-bars"></i> Static Text </button>
+      		<input type="hidden" name="field" value="yesnona">
+      		<button name="submit" type="submit" class="btn btn-outline-secondary btn-lg btn-block text-left"><i class="btn btn-secondary fa fa-th-list"></i> List Selector</button>
       	</form>
       	<form method="post" action="scripts/addField.php">
       		<input type="hidden" name="field" value="numeric">
       		<button name="submit" type="submit" class="btn btn-outline-secondary btn-lg btn-block text-left"><h6 class="btn btn-secondary">123...</h6> Numeric input</button>
       	</form>
       	<form method="post" action="scripts/addField.php">
-      		<input type="hidden" name="field" value="photo">
-      		<button name="submit" type="submit" class="btn btn-outline-secondary btn-lg btn-block text-left"><i class="btn btn-secondary fa fa-camera"></i> Photo </button>
-      	</form>
-      	<form method="post" action="scripts/addField.php">
       		<input type="hidden" name="field" value="optionlist">
       		<button name="submit" type="submit" class="btn btn-outline-secondary btn-lg btn-block text-left"><i class="btn btn-secondary fa fa-list-ul"></i> Option List </button>
       	</form>
       	<form method="post" action="scripts/addField.php">
+      		<input type="hidden" name="field" value="photo">
+      		<button name="submit" type="submit" class="btn btn-outline-secondary btn-lg btn-block text-left"><i class="btn btn-secondary fa fa-camera"></i> Photo </button>
+      	</form>
+      	<form method="post" action="scripts/addField.php">
+      		<input type="hidden" name="field" value="statictext">
+      		<button name="submit" type="submit" class="btn btn-outline-secondary btn-lg btn-block text-left"><i class="btn btn-secondary fa fa-bars"></i> Static Text </button>
+      	</form>
+      	<form method="post" action="scripts/addField.php">
+      		<input type="hidden" name="field" value="text">
+      		<button name="submit" value="True" type="submit" class="btn btn-outline-secondary btn-lg btn-block text-left" ><h6 class="btn btn-secondary"> ABC...</h6> Text</button>
+      	</form>      	
+      	<form method="post" action="scripts/addField.php">
       		<input type="hidden" name="field" value="yesnona">
       		<button name="submit" type="submit" class="btn btn-outline-secondary btn-lg btn-block text-left"><i class="btn btn-secondary fa fa-check-square"></i> Yes/NO/NA</button>
       	</form>
-
+		
       		
 			
 			
