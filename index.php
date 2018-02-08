@@ -9,6 +9,7 @@ if(!isset($_SESSION['selectedField']))
 	$_SESSION['selectedField'] = 'field1';
 }
 
+
 //  Check for Session selectedPage
 if(!isset($_SESSION['selectedPage']))
 {
@@ -64,6 +65,8 @@ if(!isset($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SE
 }
 
 
+$forms = scandir("forms");
+
 
 //   Testing outputs 
 /*
@@ -81,10 +84,10 @@ echo "Page Index: " . $_SESSION['pageIndex'];
 echo "<br>";
 echo "Section Index: " . $_SESSION['sectionIndex'];
 
-
+*/
 echo "<br>";
 print_r($_SESSION['form'])
-*/
+
 
 //  End Testing
 
@@ -166,13 +169,72 @@ print_r($_SESSION['form'])
 								<div class="container">
 									<div class="row">	
 										<div class="col">
-								 			<i class="fa fa-floppy-o"></i> Save    
+											
+											<form method="post" action="scripts/saveForm.php">
+								 				<button type="submit" class="btn"><i class="fa fa-floppy-o"></i> Save</button>
+											</form>
+											
+								 				<button type="button" class="btn" data-toggle="modal" data-target="#saveFormModal"><i class="fa fa-floppy-o"></i> Save</button>
+												
+												<div class="modal" id="saveFormModal" tabindex="-1" role="dialog">
+												  <div class="modal-dialog" role="document">
+												    <div class="modal-content">
+												      <div class="modal-header">
+												        <h5 class="modal-title">Save</h5>
+												        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												          <span aria-hidden="true">&times;</span>
+												        </button>
+												      </div>
+												      <div class="modal-body">
+												      <?php    echo  '<input type="textbox" name="formName" placeholder="' .  $_SESSION['form']['formName'] . '">'; ?>
+												      </div>
+												      <div class="modal-footer">
+												        <form method="post" action="scripts/saveForm.php">
+												        	<button type="submit" class="btn btn-success">Save</button>
+												        </form>
+												        <form>
+												        	<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+												        </form>										        
+												      </div>
+												    </div>
+												  </div>
+												</div>
 								 		</div>
 								 		<div class="col">
-								 			<i class="fa fa-cog"></i> Configure
+								 			<form method="post" action="scripts/configureForm.php">
+								 				<button type="submit" class="btn"><i class="fa fa-cog"></i> Configure</button>
+								 			</form>
 								 		</div>
 								 		<div class="col">
-								 			<i class="fa fa-plus"></i> New
+								 			
+								 				<button type="button" class="btn" data-toggle="modal" data-target="#newFormModal"><i class="fa fa-plus"></i> New</button>
+								 				<div class="modal" id="newFormModal" tabindex="-1" role="dialog">
+												  <div class="modal-dialog" role="document">
+												    <div class="modal-content">
+												      <div class="modal-header">
+												        <h5 class="modal-title">Save Changes?</h5>
+												        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												          <span aria-hidden="true">&times;</span>
+												        </button>
+												      </div>
+												      <div class="modal-body">
+												        <p>Would you like to save changes to the current form?</p>
+												      </div>
+												      <div class="modal-footer">
+												        <form method="post" action="scripts/saveForm.php">
+												        	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#saveFormModal" data-dismiss="modal">Yes</button>
+												        </form>
+												        <form method="post" action="scripts/newForm.php">
+												        	<button type="submit" class="btn btn-danger">No</button>
+												        </form>
+												        <form>
+												        	<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+												        </form>										        
+												      </div>
+												    </div>
+												  </div>
+												</div>
+								 			
 								 		</div>
 								 	</div>	
 							 	</div>
@@ -188,7 +250,7 @@ print_r($_SESSION['form'])
 								  <div class="dropdown-menu">
 
 								  	<?php  
-								  		$forms = scandir("forms");
+								  		
 
 								  		if(sizeof($forms) > 2)
 								  		{
@@ -402,26 +464,16 @@ print_r($_SESSION['form'])
 			<div class="col-md-4">
 				<div class="card">
   					<div class="card-body">
-  						<div class="container">
-  							
-  								
-							<?php
-		  						if(sizeof($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']) > 0)
-		  						{
-		  							$field = $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields'][$_SESSION['selectedField']];
-			  						foreach( $field as $key=>$property)
-			  						{
-			  							echo "<div class='row'>";
-			  							echo "<div class='col-md-5 text-left'><strong>" . strtoupper($key) . "</strong></div>"; 				
-			  							echo "<div class='col-md-4 text-left'>" . $property . "</div>";			  							
-			  							echo "</div>";
-			  						}
-								}
-		  					?>
-  								
-  							
-  						</div>
-  						
+  						<?php
+  						if(sizeof($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']) > 0)
+  						{
+	  						$field = $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields'][$_SESSION['selectedField']] ;
+	  						foreach($field as $key=>$property)
+	  						{
+	  							echo "<strong>" . strtoupper($key) . "</strong> " . $property . "<br>";
+	  						}
+						}
+  						?>
    						
 					</div>
 				</div>
@@ -533,16 +585,11 @@ print_r($_SESSION['form'])
       	<form method="post" action="scripts/addField.php">
       		<input type="hidden" name="field" value="text">
       		<button name="submit" value="True" type="submit" class="btn btn-outline-secondary btn-lg btn-block text-left" ><h6 class="btn btn-secondary"> ABC...</h6> Text</button>
-      	</form>      	
+      	</form>
       	<form method="post" action="scripts/addField.php">
       		<input type="hidden" name="field" value="yesnona">
       		<button name="submit" type="submit" class="btn btn-outline-secondary btn-lg btn-block text-left"><i class="btn btn-secondary fa fa-check-square"></i> Yes/NO/NA</button>
       	</form>
-		
-      		
-			
-			
-		
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
