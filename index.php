@@ -8,6 +8,10 @@ if(!isset($_SESSION['selectedField']))
 	// initialize Session selectedField
 	$_SESSION['selectedField'] = 'field1';
 }
+if(!array_key_exists($_SESSION['selectedField'], $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']))
+{
+	$_SESSION['selectedField'] = key( $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']);
+}
 
 
 //  Check for Session selectedPage
@@ -80,10 +84,10 @@ echo "<strong>size of page sections</strong>";
 echo sizeof($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']);
 
 echo "<br>";
-echo "Page Index: " . $_SESSION['pageIndex'];
+echo $_SESSION['selectedField'];
 
 echo "<br>";
-echo "Section Index: " . $_SESSION['sectionIndex'];
+echo key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']);
 
 
 echo "<br>";
@@ -185,6 +189,7 @@ print_r($_SESSION['form'])
 												      </div>
 												      <div class="modal-body">
 												      	<form method="post" action="scripts/saveForm.php">
+												      	<?php	echo '<input type="hidden" name="formName" value="' . $_SESSION['form']['formName'] . '">' ?>
 												      <?php    echo  'Save Form "<strong>' .  $_SESSION['form']['formName'] . '</strong>"?'; ?>
 												      </div>
 												      <div class="modal-footer">
@@ -736,6 +741,7 @@ print_r($_SESSION['form'])
       </div>
       <div class="modal-footer">
        <form method="post" action="scripts/saveForm.php">
+       		<?php	echo '<input type="hidden" name="formName" value="' . $_SESSION['form']['formName'] . '">' ?>
         	<button type="submit" class="btn btn-success">YES</button>
         
         	<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
