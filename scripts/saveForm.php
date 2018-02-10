@@ -1,28 +1,26 @@
 <?php
 session_start();  // start session
 
-?>
 
+$formName = $_POST['formName'];
 
-<?php
+if($formName > '')
+{
+$_SESSION['form']['formName'] = $formName;
+}
 
 $filename = $_SESSION['form']['formName'] . ".xml";
-
-if (!in_array($filename, (scandir("../forms")))) 
+$file = fopen("../forms/" . $filename, "w") or die("Sorry didn't do it!");
+$form = $formName . "/n";
+foreach($_SESSION['form']['pages'] as $key=>$page)
 {
-	
-	$file = fopen("../forms/" . $filename, "w") or die("Sorry didn't do it!");
-	$form = "I'm the form";
-	fwrite($file, $form);
-	fclose($file);
+	$form = $form + $key . "=" . $page . "/n";
 }
-else
-{
-	
-}
+fwrite($file, $form);
+fclose($file);	
 
-//header("Location:../index.php");
+header("Location:../index.php");
 ?>
 
 
-		
+	

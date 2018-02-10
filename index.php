@@ -66,6 +66,7 @@ if(!isset($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SE
 
 
 $forms = scandir("forms");
+$formName = $_SESSION['form']['formName'];
 
 
 //   Testing outputs 
@@ -84,10 +85,10 @@ echo "Page Index: " . $_SESSION['pageIndex'];
 echo "<br>";
 echo "Section Index: " . $_SESSION['sectionIndex'];
 
-*/
+
 echo "<br>";
 print_r($_SESSION['form'])
-
+*/
 
 //  End Testing
 
@@ -168,14 +169,11 @@ print_r($_SESSION['form'])
 							<div class="col-md-5">
 								<div class="container">
 									<div class="row">	
-										<div class="col">
-											
-											<form method="post" action="scripts/saveForm.php">
-								 				<button type="submit" class="btn"><i class="fa fa-floppy-o"></i> Save</button>
-											</form>
+										<div class="col">										
 											
 								 				<button type="button" class="btn" data-toggle="modal" data-target="#saveFormModal"><i class="fa fa-floppy-o"></i> Save</button>
 												
+												<!-- Save form Modal  -->
 												<div class="modal" id="saveFormModal" tabindex="-1" role="dialog">
 												  <div class="modal-dialog" role="document">
 												    <div class="modal-content">
@@ -186,19 +184,29 @@ print_r($_SESSION['form'])
 												        </button>
 												      </div>
 												      <div class="modal-body">
-												      <?php    echo  '<input type="textbox" name="formName" placeholder="' .  $_SESSION['form']['formName'] . '">'; ?>
+												      	<form method="post" action="scripts/saveForm.php">
+												      <?php    echo  'Save Form "<strong>' .  $_SESSION['form']['formName'] . '</strong>"?'; ?>
 												      </div>
 												      <div class="modal-footer">
-												        <form method="post" action="scripts/saveForm.php">
-												        	<button type="submit" class="btn btn-success">Save</button>
-												        </form>
-												        <form>
+												        <?php
+												        $filename = $_SESSION['form']['formName'] . ".xml";
+												        if (!in_array($filename, (scandir("forms"))))
+												        {
+												        	echo '<button type="submit" class="btn btn-success">Save</button>';	
+												        }
+												        else
+												        {
+												        	echo '<button type="button" class="btn btn-success" data-toggle="modal" data-target="#saveAlertModal" data-dismiss="modal">Save</button>';
+												        }
+												        ?>
 												        	<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 												        </form>										        
 												      </div>
 												    </div>
 												  </div>
 												</div>
+												<!-- End Save form Modal  -->
+
 								 		</div>
 								 		<div class="col">
 								 			<form method="post" action="scripts/configureForm.php">
@@ -239,8 +247,35 @@ print_r($_SESSION['form'])
 								 	</div>	
 							 	</div>
 							</div>
-							<div class="col-md-3"></div>
-							<div class="col-md-4">	
+							<div class="col-md-4"> <?php echo "<strong class='alert-secondary'>" . $formName . "</strong>"; ?><button class='btn fa fa-pencil' style="color: red;" data-toggle="modal" data-target="#editFormNameModal"></button></div>
+
+							<!-- Change Form Name Modal -->
+							<div class="modal" id="editFormNameModal" tabindex="-1" role="dialog">
+							  <div class="modal-dialog" role="document">
+							    <div class="modal-content">
+							      <div class="modal-header">
+							        <h5 class="modal-title">Edit Form Name</h5>
+							        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							          <span aria-hidden="true">&times;</span>
+							        </button>
+							      </div>
+							      <div class="modal-body">
+							      	 <form method="post" action="scripts/editFormName.php">
+							      <?php    echo  '<input type="textbox" name="formName" placeholder="' .  $_SESSION['form']['formName'] . '">'; ?>
+							      </div>
+							      <div class="modal-footer">
+							       
+							        	<button type="submit" class="btn btn-success">submit</button>
+							        
+							        	<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+							        </form>										        
+							      </div>
+							    </div>
+							  </div>
+							</div>
+							<!-- End Change Form Name Modal -->
+
+							<div class="col-md-3">	
 								<form class="form-inline my-2 my-lg-0" method="post" action="scripts/searchForms.php">
 								<!-- Example single danger button -->
 								<div class="btn-group">
@@ -683,6 +718,34 @@ print_r($_SESSION['form'])
 </div>
 
 <!-- End Page Edit Modal  -->
+
+<!-- File Exists Alert Modal  -->
+
+<div class="modal" id="saveAlertModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">File Exists</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	 The File "<?php echo $formName; ?>" Already Exists.  Would you like to save anyway?
+      
+      </div>
+      <div class="modal-footer">
+       <form method="post" action="scripts/saveForm.php">
+        	<button type="submit" class="btn btn-success">YES</button>
+        
+        	<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </form>										        
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- End File Exists Alert Modal  -->
 
 
 	
