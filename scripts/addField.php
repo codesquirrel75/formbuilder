@@ -10,7 +10,7 @@ $properties = array('fieldName'=>'field ' . $fieldNumber, 'fieldType'=>$type);
 
 if($type == "text")
 {
-	$properties = array('fieldName'=>'field ' . $fieldNumber, 'fieldType'=>$type, 'blubergub'=>'Fluber');
+	$properties = array('fieldName'=>'<input type="text" placeholder="Field ' . $fieldNumber . '" size="15" name="fieldName"> ', 'fieldType'=>$type, 'blubergub'=>'Fluber');
 }
 if($type == "statictext")
 {
