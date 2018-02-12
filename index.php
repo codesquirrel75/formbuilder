@@ -1,16 +1,28 @@
 <?php
 session_start();  // start session
 
+//  functions to set page and section numbers
+
+include 'scripts/functions.php';
+
+
+// Check for the page setup array
+if(!isset($_SESSION['form']['pages']))
+{
+	$_SESSION['form'] = array('formName'=>'form' . (sizeof(scandir('forms'))-1), 'pages'=>array('page' . pageNumber() =>array('pageName'=>'page' . pageNumber(), 'sections'=>array('section' . sectionNumber() =>array('sectionName'=>'section' . sectionNumber(), 'fields'=>array())))));
+
+	$_SESSION['selectedPage'] = key($_SESSION['form']['pages']);
+	$_SESSION['pageIndex'] = array_search($_SESSION['selectedPage'],array_keys($_SESSION['form']['pages']));
+	$_SESSION['selectedSection'] = key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']);
+	$_SESSION['sectionIndex'] = array_search($_SESSION['selectedSection'],array_keys($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']));
+
+}
 
 // Check for Session selectedField
 if(!isset($_SESSION['selectedField']))
 {
 	// initialize Session selectedField
 	$_SESSION['selectedField'] = 'field1';
-}
-if(!array_key_exists($_SESSION['selectedField'], $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']))
-{
-	$_SESSION['selectedField'] = key( $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']);
 }
 
 
@@ -30,21 +42,13 @@ if(!isset($_SESSION['selectedSection']))
 	
 }
 
-//  functions to set page and section numbers
-
-include 'scripts/functions.php';
-
-// Check for the page setup array
-if(!isset($_SESSION['form']['pages']))
+if(!array_key_exists($_SESSION['selectedField'], $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']))
 {
-	$_SESSION['form'] = array('formName'=>'form' . (sizeof(scandir('forms'))-1), 'pages'=>array('page' . pageNumber() =>array('pageName'=>'page' . pageNumber(), 'sections'=>array('section' . sectionNumber() =>array('sectionName'=>'section' . sectionNumber(), 'fields'=>array())))));
-
-	$_SESSION['selectedPage'] = key($_SESSION['form']['pages']);
-	$_SESSION['pageIndex'] = array_search($_SESSION['selectedPage'],array_keys($_SESSION['form']['pages']));
-	$_SESSION['selectedSection'] = key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']);
-	$_SESSION['sectionIndex'] = array_search($_SESSION['selectedSection'],array_keys($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']));
-
+	$_SESSION['selectedField'] = key( $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']);
 }
+
+
+
 
 // Check for empty pages
 if(sizeof($_SESSION['form']['pages']) == 0)
@@ -87,11 +91,11 @@ echo "<br>";
 echo $_SESSION['selectedField'];
 
 echo "<br>";
-echo key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']);
+print_r($_SESSION['form']);
 
 
 echo "<br>";
-print_r($_SESSION['form'])
+echo $_SESSION['selectedPage'];
 */
 
 //  End Testing
