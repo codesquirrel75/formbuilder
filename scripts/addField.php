@@ -6,12 +6,14 @@ include 'functions.php';
 
 $type = $_POST['field'];
 $fieldNumber = fieldNumber();
-$properties = array('fieldName'=>'field ' . $fieldNumber, 'fieldType'=>$type);
+$properties = array('fieldName'=>'<input type="text" placeholder="Field ' . $fieldNumber . '" size="15" name="fieldName"> ', 'fieldType'=>$type);
 
 if($type == "text")
 {
-	$properties = array('fieldName'=>'<input type="text" placeholder="Field ' . $fieldNumber . '" size="15" name="fieldName"> ', 'fieldType'=>$type, 'blubergub'=>'Fluber');
+	$var = array('blubergub'=>'Flubers', 'visible'=>'True');
+	$properties = array_merge($properties, $var);
 }
+
 if($type == "statictext")
 {
 
@@ -38,5 +40,3 @@ $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['sel
 header("Location:../index.php");
 
 ?>
-
-);

@@ -1,6 +1,22 @@
 <?php
 session_start();  // start session
 
+//  functions to set page and section numbers
+
+include 'scripts/functions.php';
+
+
+// Check for the page setup array
+if(!isset($_SESSION['form']['pages']))
+{
+	$_SESSION['form'] = array('formName'=>'form' . (sizeof(scandir('forms'))-1), 'pages'=>array('page' . pageNumber() =>array('pageName'=>'page' . pageNumber(), 'sections'=>array('section' . sectionNumber() =>array('sectionName'=>'section' . sectionNumber(), 'fields'=>array())))));
+
+	$_SESSION['selectedPage'] = key($_SESSION['form']['pages']);
+	$_SESSION['pageIndex'] = array_search($_SESSION['selectedPage'],array_keys($_SESSION['form']['pages']));
+	$_SESSION['selectedSection'] = key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']);
+	$_SESSION['sectionIndex'] = array_search($_SESSION['selectedSection'],array_keys($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']));
+
+}
 
 // Check for Session selectedField
 if(!isset($_SESSION['selectedField']))
@@ -26,21 +42,13 @@ if(!isset($_SESSION['selectedSection']))
 	
 }
 
-//  functions to set page and section numbers
-
-include 'scripts/functions.php';
-
-// Check for the page setup array
-if(!isset($_SESSION['form']['pages']))
+if(!array_key_exists($_SESSION['selectedField'], $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']))
 {
-	$_SESSION['form'] = array('formName'=>'form' . (sizeof(scandir('forms'))-1), 'pages'=>array('page' . pageNumber() =>array('pageName'=>'page' . pageNumber(), 'sections'=>array('section' . sectionNumber() =>array('sectionName'=>'section' . sectionNumber(), 'fields'=>array())))));
-
-	$_SESSION['selectedPage'] = key($_SESSION['form']['pages']);
-	$_SESSION['pageIndex'] = array_search($_SESSION['selectedPage'],array_keys($_SESSION['form']['pages']));
-	$_SESSION['selectedSection'] = key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']);
-	$_SESSION['sectionIndex'] = array_search($_SESSION['selectedSection'],array_keys($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']));
-
+	$_SESSION['selectedField'] = key( $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']);
 }
+
+
+
 
 // Check for empty pages
 if(sizeof($_SESSION['form']['pages']) == 0)
@@ -80,14 +88,14 @@ echo "<strong>size of page sections</strong>";
 echo sizeof($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']);
 
 echo "<br>";
-echo "Page Index: " . $_SESSION['pageIndex'];
+echo $_SESSION['selectedField'];
 
 echo "<br>";
-echo "Section Index: " . $_SESSION['sectionIndex'];
+print_r($_SESSION['form']);
 
 
 echo "<br>";
-print_r($_SESSION['form'])
+echo $_SESSION['selectedPage'];
 */
 
 //  End Testing
@@ -185,6 +193,7 @@ print_r($_SESSION['form'])
 												      </div>
 												      <div class="modal-body">
 												      	<form method="post" action="scripts/saveForm.php">
+												      	<?php	echo '<input type="hidden" name="formName" value="' . $_SESSION['form']['formName'] . '">' ?>
 												      <?php    echo  'Save Form "<strong>' .  $_SESSION['form']['formName'] . '</strong>"?'; ?>
 												      </div>
 												      <div class="modal-footer">
@@ -736,6 +745,7 @@ print_r($_SESSION['form'])
       </div>
       <div class="modal-footer">
        <form method="post" action="scripts/saveForm.php">
+       		<?php	echo '<input type="hidden" name="formName" value="' . $_SESSION['form']['formName'] . '">' ?>
         	<button type="submit" class="btn btn-success">YES</button>
         
         	<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
