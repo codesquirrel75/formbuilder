@@ -78,10 +78,10 @@ $formName = $_SESSION['form']['formName'];
 
 
 //   Testing outputs 
-/*
+
 echo "<br>";
-echo "<strong>size of pages</strong>";
-echo sizeof($_SESSION['form']['pages']);
+echo is_bool("hi");
+/*
 
 echo "<br>";
 echo "<strong>size of page sections</strong>";
@@ -115,7 +115,6 @@ echo $_SESSION['selectedPage'];
 
 		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-		<!--<script src="js/formbuilder.js"></script>-->
 		
 	</head>
 	
@@ -445,6 +444,15 @@ echo $_SESSION['selectedPage'];
 									      	</form>
 									      	';
 										}
+										elseif($field['fieldType'] == "listselector")
+										{
+											echo '
+											<form method="post" action="scripts/selectField.php">
+									      		<input type="hidden" name="index" value="' . $key . '">
+									      		<button name="submit" value="True" type="submit" class="alert ' . $type . ' btn-lg btn-block text-left" ><i class="btn btn-success fa fa-th-list"></i> List Selector</button>
+									      	</form>
+									      	';
+										}
 										elseif($field['fieldType'] == "numeric")
 										{
 											echo '
@@ -508,17 +516,21 @@ echo $_SESSION['selectedPage'];
 			<div class="col-md-4">
 				<div class="card">
   					<div class="card-body">
+  						<form method="post" action="scripts/updateProperties.php">
   						<?php
   						if(sizeof($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']) > 0)
   						{
 	  						$field = $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields'][$_SESSION['selectedField']] ;
+	  						echo "<div class='alert alert-secondary'><strong>" . strtoupper($field['fieldType']) . "</strong></div><hr>";
 	  						foreach($field as $key=>$property)
 	  						{
-	  							echo "<strong>" . strtoupper($key) . "</strong> " . $property . "<br>";
+	  							$propertyInput = getPropertyInput($key);
+	  							echo "<strong>" . strtoupper($key) . "</strong> " . $propertyInput . "<br>";
 	  						}
+	  						echo "<button class='btn' style='border-width:medium; color:white; background-color:#00adef; border-color:#29a543'>Update</button>";
 						}
   						?>
-   						
+   						</form>
 					</div>
 				</div>
 			</div>
@@ -607,7 +619,7 @@ echo $_SESSION['selectedPage'];
       </div>
       <div class="modal-body">
       	<form method="post" action="scripts/addField.php">
-      		<input type="hidden" name="field" value="yesnona">
+      		<input type="hidden" name="field" value="listselector">
       		<button name="submit" type="submit" class="btn btn-outline-secondary btn-lg btn-block text-left"><i class="btn btn-secondary fa fa-th-list"></i> List Selector</button>
       	</form>
       	<form method="post" action="scripts/addField.php">
@@ -760,9 +772,10 @@ echo $_SESSION['selectedPage'];
 
 	
 		
-		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
 
 
 	</BODY>

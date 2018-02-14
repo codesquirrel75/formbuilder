@@ -57,4 +57,72 @@ function fieldNumber()
 	return $fieldNumber;
 }
 
+function getPropertyInput($property)
+{
+	$outPut = '';
+	$field = $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields'][$_SESSION['selectedField']];
+	/*
+	if($property == 'fieldName')
+	{
+		$value =$field['fieldName'];
+		$outPut ="<input type='textbox' size='15' name='fieldName' value='" . $value . "'/>";
+	}
+	if($property == 'hideFieldLabel')
+	{
+		
+	}
+
+	if($property == 'fieldType')
+	{
+		$outPut = $field['fieldType'];
+	}
+	*/
+	
+	if(is_string($field[$property]))
+	{
+		$value = $field[$property];
+		$outPut = "<input type='textbox' size='15' name='fieldName' value='" . $value . "'/>";	
+	}
+	
+	if(is_bool($field[$property]))
+	{
+		$outPut = "<input type='checkbox' name='hideLabel'/>";
+	}
+	/*
+	if()
+	{
+		
+	}
+	if()
+	{
+		
+	}
+	if()
+	{
+		
+	}
+	if()
+	{
+		
+	}
+	if()
+	{
+		
+	}
+	if()
+	{
+		
+	}
+	if()
+	{
+		
+	}
+	if()
+	{
+		
+	}
+*/
+	return $outPut;
+}
+
 ?>
