@@ -47,6 +47,9 @@ if(!array_key_exists($_SESSION['selectedField'], $_SESSION['form']['pages'][$_SE
 	$_SESSION['selectedField'] = key( $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']);
 }
 
+// Set field Index
+$_SESSION['fieldIndex'] = array_search($_SESSION['selectedField'],array_keys($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']));
+
 
 
 
@@ -76,16 +79,16 @@ if(!isset($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SE
 $forms = scandir("forms");
 $formName = $_SESSION['form']['formName'];
 
-
+/*
 //   Testing outputs 
-
 echo "<br>";
 echo is_bool("hi");
-/*
+
 
 echo "<br>";
 echo "<strong>size of page sections</strong>";
-echo sizeof($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']);
+print_r($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']);
+
 
 echo "<br>";
 echo $_SESSION['selectedField'];
@@ -95,7 +98,11 @@ print_r($_SESSION['form']);
 
 
 echo "<br>";
-echo $_SESSION['selectedPage'];
+print_r($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']);
+
+
+echo $_SESSION['fieldIndex'];
+echo key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']);
 */
 
 //  End Testing
