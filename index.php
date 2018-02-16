@@ -47,6 +47,9 @@ if(!array_key_exists($_SESSION['selectedField'], $_SESSION['form']['pages'][$_SE
 	$_SESSION['selectedField'] = key( $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']);
 }
 
+// Set field Index
+$_SESSION['fieldIndex'] = array_search($_SESSION['selectedField'],array_keys($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']));
+
 
 
 
@@ -76,16 +79,16 @@ if(!isset($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SE
 $forms = scandir("forms");
 $formName = $_SESSION['form']['formName'];
 
-
-//   Testing outputs 
 /*
+//   Testing outputs 
 echo "<br>";
-echo "<strong>size of pages</strong>";
-echo sizeof($_SESSION['form']['pages']);
+echo is_bool("hi");
+
 
 echo "<br>";
 echo "<strong>size of page sections</strong>";
-echo sizeof($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']);
+print_r($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']);
+
 
 echo "<br>";
 echo $_SESSION['selectedField'];
@@ -95,7 +98,11 @@ print_r($_SESSION['form']);
 
 
 echo "<br>";
-echo $_SESSION['selectedPage'];
+print_r($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']);
+
+
+echo $_SESSION['fieldIndex'];
+echo key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']);
 */
 
 //  End Testing
@@ -115,7 +122,6 @@ echo $_SESSION['selectedPage'];
 
 		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-		<!--<script src="js/formbuilder.js"></script>-->
 		
 	</head>
 	
@@ -517,17 +523,24 @@ echo $_SESSION['selectedPage'];
 			<div class="col-md-4">
 				<div class="card">
   					<div class="card-body">
-  						<form method="post" action="scripts/updateFields.php">
+
+  						<form method="post" action="scripts/updateProperties.php">
+
   						<?php
   						if(sizeof($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']) > 0)
   						{
 	  						$field = $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields'][$_SESSION['selectedField']] ;
 
+	  						echo "<div class='alert alert-secondary'><strong>" . strtoupper($field['fieldType']) . "</strong></div><hr>";
+
 	  						foreach($field as $key=>$property)
 	  						{
-	  							echo "<strong>" . strtoupper($key) . "</strong> " . $property . "<br>";
+	  							$propertyInput = getPropertyInput($key);
+	  							echo "<strong>" . strtoupper($key) . "</strong> " . $propertyInput . "<br>";
 	  						}
-	  						echo '<button class="btn" style="color:white; background-color:#00ADEF; border-color:#29A543; border-width:medium">Update</button>';
+
+	  						echo "<button class='btn' style='border-width:medium; color:white; background-color:#00adef; border-color:#29a543'>Update</button>";
+
 						}
   						?>
    						</form>
@@ -772,9 +785,10 @@ echo $_SESSION['selectedPage'];
 
 	
 		
-		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
 
 
 	</BODY>

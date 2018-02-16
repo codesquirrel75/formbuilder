@@ -57,4 +57,27 @@ function fieldNumber()
 	return $fieldNumber;
 }
 
+function getPropertyInput($property)
+{
+	$outPut = '';
+	$field = $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields'][$_SESSION['selectedField']];
+	
+	
+	if(is_string($field[$property]))
+	{
+		$value = $field[$property];
+		$outPut = "<input type='textbox' size='15' name='" . $property . "' value='" . $value . "'/>";	
+	}
+	
+	if(is_bool($field[$property]))
+	{
+		$outPut = "<input type='checkbox' name='" . $property . "'/>";
+	}
+	if(is_numeric($field[$property]))
+	{
+		$outPut = "<input type='number' name='" . $property . "' />";
+	}
+	return $outPut;
+}
+
 ?>

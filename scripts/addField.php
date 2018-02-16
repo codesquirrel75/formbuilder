@@ -6,7 +6,10 @@ include 'functions.php';
 
 $type = $_POST['field'];
 $fieldNumber = fieldNumber();
-$properties = array('fieldLabel'=>'<input type="text" placeholder="Field ' . $fieldNumber . '" size="15" name="fieldName"> ', 'fieldType'=>$type, 'field_Key'=>'key', 'hide_Field_Label'=>False, 'hidden'=>False, 'exclude_From_Reports'=>False,);
+
+$properties = array('fieldName'=>'Field Name', 'fieldType'=>$type, 'fieldKey'=>'FieldKey', 'hideFieldLabel'=>False, 'hidden'=>False);
+
+
 
 if($type == "text")
 {
@@ -25,7 +28,9 @@ if($type == "statictext")
 }
 if($type == "numeric")
 {
+
 	$var = array('default_Value'=>'default', 'field_Rules'=>'rules', 'enabled'=>False, 'exclude_On_Sync'=>False,);
+
 	$properties = array_merge($properties, $var);
 }
 if($type == "photo")
