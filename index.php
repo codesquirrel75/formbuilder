@@ -523,18 +523,24 @@ echo key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SES
 			<div class="col-md-4">
 				<div class="card">
   					<div class="card-body">
+
   						<form method="post" action="scripts/updateProperties.php">
+
   						<?php
   						if(sizeof($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']) > 0)
   						{
 	  						$field = $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields'][$_SESSION['selectedField']] ;
+
 	  						echo "<div class='alert alert-secondary'><strong>" . strtoupper($field['fieldType']) . "</strong></div><hr>";
+
 	  						foreach($field as $key=>$property)
 	  						{
 	  							$propertyInput = getPropertyInput($key);
 	  							echo "<strong>" . strtoupper($key) . "</strong> " . $propertyInput . "<br>";
 	  						}
+
 	  						echo "<button class='btn' style='border-width:medium; color:white; background-color:#00adef; border-color:#29a543'>Update</button>";
+
 						}
   						?>
    						</form>
