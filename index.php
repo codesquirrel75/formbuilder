@@ -445,6 +445,15 @@ echo $_SESSION['selectedPage'];
 									      	</form>
 									      	';
 										}
+										elseif($field['fieldType'] == "listselector")
+										{
+											echo '
+											<form method="post" action="scripts/selectField.php">
+									      		<input type="hidden" name="index" value="' . $key . '">
+									      		<button name="submit" value="True" type="submit" class="alert ' . $type . ' btn-lg btn-block text-left" ><i class="btn btn-success fa fa-th-list"></i> List Selector</button>
+									      	</form>
+									      	';
+										}
 										elseif($field['fieldType'] == "numeric")
 										{
 											echo '
@@ -508,17 +517,20 @@ echo $_SESSION['selectedPage'];
 			<div class="col-md-4">
 				<div class="card">
   					<div class="card-body">
+  						<form method="post" action="scripts/updateFields.php">
   						<?php
   						if(sizeof($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']) > 0)
   						{
 	  						$field = $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields'][$_SESSION['selectedField']] ;
+
 	  						foreach($field as $key=>$property)
 	  						{
 	  							echo "<strong>" . strtoupper($key) . "</strong> " . $property . "<br>";
 	  						}
+	  						echo '<button class="btn" style="color:white; background-color:#00ADEF; border-color:#29A543; border-width:medium">Update</button>';
 						}
   						?>
-   						
+   						</form>
 					</div>
 				</div>
 			</div>
@@ -607,7 +619,7 @@ echo $_SESSION['selectedPage'];
       </div>
       <div class="modal-body">
       	<form method="post" action="scripts/addField.php">
-      		<input type="hidden" name="field" value="yesnona">
+      		<input type="hidden" name="field" value="listselector">
       		<button name="submit" type="submit" class="btn btn-outline-secondary btn-lg btn-block text-left"><i class="btn btn-secondary fa fa-th-list"></i> List Selector</button>
       	</form>
       	<form method="post" action="scripts/addField.php">

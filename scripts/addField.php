@@ -6,41 +6,41 @@ include 'functions.php';
 
 $type = $_POST['field'];
 $fieldNumber = fieldNumber();
-$properties = array('fieldLabel'=>'<input type="text" placeholder="Field ' . $fieldNumber . '" size="15" name="fieldName"> ', 'fieldType'=>$type, 'field_Key'=>'key', 'alert_Type'=>'alert', 'hide_Field_Label'=>'hide', 'hidden'=>'hidden', 'exclude_From_Reports'=>'exclude',);
+$properties = array('fieldLabel'=>'<input type="text" placeholder="Field ' . $fieldNumber . '" size="15" name="fieldName"> ', 'fieldType'=>$type, 'field_Key'=>'key', 'hide_Field_Label'=>False, 'hidden'=>False, 'exclude_From_Reports'=>False,);
 
 if($type == "text")
 {
-	$var = array('default_Value'=>'default', 'hint_Text'=>'hint', 'enforce_Min/max'=>'enforce', 'minimum_Length'=>'min', 'maximum_Length'=>'max', 'fieldRules'=>'rules', 'required'=>'required', 'enabled'=>'enabled', 'capture_Geo_Location'=>'geo', 'capture_Time_Stamp'=>'time', 'secure'=>'secure',);
+	$var = array('default_Value'=>'default', 'hint_Text'=>'hint', 'enforce_Min/max'=>False, 'minimum_Length'=>'min', 'maximum_Length'=>'max', 'fieldRules'=>'rules', 'required'=>False, 'enabled'=>False, 'capture_Time_Stamp'=>False, 'secure'=>False,);
 	$properties = array_merge($properties, $var);
 }
 if($type == "listselector")
 {
-	$var = array('allow_Multi_Selection'=>'multi', 'field_Rules'=>'rules', 'required'=>'required', 'enabled'=>'enabled', 'capture_Time_Stamp'=>'stamp', 'values'=>'values',);
+	$var = array('allow_Multi_Selection'=>False, 'field_Rules'=>'rules', 'required'=>False, 'enabled'=>False, 'capture_Time_Stamp'=>False, 'values'=>'values',);
 	$properties = array_merge($properties, $var);
 }
 if($type == "statictext")
 {
-	$var = array('default_Value'=>'default', 'field_Rules'=>'rules', 'enabled'=>'enabled', 'exclude_On_Sync'=>'sync', 'alert_Type'=>'alert',);
+	$var = array('default_Value'=>'default', 'field_Rules'=>'rules', 'enabled'=>False, 'exclude_On_Sync'=>False,);
 	$properties = array_merge($properties, $var);
 }
 if($type == "numeric")
 {
-	$var = array('default_Value'=>'default', 'field_Rules'=>'rules', 'enabled'=>'enabled', 'exclude_On_Sync'=>'sync',);
+	$var = array('default_Value'=>'default', 'field_Rules'=>'rules', 'enabled'=>False, 'exclude_On_Sync'=>False,);
 	$properties = array_merge($properties, $var);
 }
 if($type == "photo")
 {
-	$var = array('photo_Caption_Overlay'=>'caption', 'hint_Text'=>'hint', 'photo_Library_Enabled'=>'library', 'camera_Enabled'=>'camera', 'time_stamp_On_Image'=>'stamp', 'allow_Annotation'=>'annotation', 'gps_Tagging'=>'gps', 'photo_Quality'=>'quality', 'maximum_Hight'=>'max hight', 'maximum_Width'=>'max width', 'capture_Geo_Location'=>'geo', 'capture_Time_Stamp'=>'time', 'exclude_On_Sync'=>'sync',);
+	$var = array('photo_Caption_Overlay'=>'caption', 'hint_Text'=>'hint', 'photo_Library_Enabled'=>False, 'camera_Enabled'=>False, 'time_stamp_On_Image'=>False, 'allow_Annotation'=>False, 'gps_Tagging'=>False, 'photo_Quality'=>'quality', 'maximum_Hight'=>50, 'maximum_Width'=>50, 'exclude_On_Sync'=>False);
 	$properties = array_merge($properties, $var);
 }
 if($type == "optionlist")
 {
-	$var = array('number_Of_Columns_For_Phones'=>'phone', 'number_Of_Columns_For_Tablets'=>'tablet', 'memory_Field'=>'memory', 'capture_Geo_Location'=>'geo', 'captureTimeStamp'=>'time', 'excludeOnSync'=>'sync',);
+	$var = array('number_Of_Columns_For_Phones'=>'phone', 'number_Of_Columns_For_Tablets'=>'tablet', 'memory_Field'=>'memory', 'excludeOnSync'=>False,);
 	$properties = array_merge($properties, $var);
 }
 if($type == "yesnona")
 {
-	$var = array('allow_N/A'=>'allow', 'default_Value'=>'default', 'field_Rules'=>'rules', 'required'=>'required', 'enabled'=>'enabled', 'capture_Geo_Location'=>'geo', 'capture_Time_Stamp'=>'time',);
+	$var = array('allow_N/A'=>'allow', 'default_Value'=>'default', 'field_Rules'=>'rules', 'required'=>False, 'enabled'=>False,);
 	$properties = array_merge($properties, $var);
 }
 
