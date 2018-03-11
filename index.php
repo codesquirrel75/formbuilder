@@ -2,7 +2,6 @@
 session_start();  // start session
 
 //  functions to set page and section numbers
-
 include 'scripts/functions.php';
 
 
@@ -79,15 +78,13 @@ if(!isset($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SE
 $forms = scandir("forms");
 $formName = $_SESSION['form']['formName'];
 
-/*
+
 //   Testing outputs 
-echo "<br>";
-echo is_bool("hi");
 
-
+/*
 echo "<br>";
 echo "<strong>size of page sections</strong>";
-print_r($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']);
+print_r($_SESSION['form']);
 
 
 echo "<br>";
@@ -524,7 +521,7 @@ echo key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SES
 				<div class="card">
   					<div class="card-body">
 
-  						<form method="post" action="scripts/updateProperties.php">
+  						
 
   						<?php
   						if(sizeof($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']) > 0)
@@ -532,18 +529,50 @@ echo key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SES
 	  						$field = $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields'][$_SESSION['selectedField']] ;
 
 	  						echo "<div class='alert alert-secondary'><strong>" . strtoupper($field['fieldType']) . "</strong></div><hr>";
+							echo "<form method='post' action='scripts/updateProperties.php'>";
 
 	  						foreach($field as $key=>$property)
 	  						{
-	  							$propertyInput = getPropertyInput($key);
-	  							echo "<strong>" . strtoupper($key) . "</strong> " . $propertyInput . "<br>";
+	  							if(!($key != "field_Rules" xor $key !="values"))
+	  							{
+		  							$propertyInput = getPropertyInput($key);
+		  							echo "<strong>" . strtoupper($key) . "</strong> " . $propertyInput . "<br>";
+	  							}
+	  							
+	  						}
+	  						
+	  						echo "<button type='submit' class='btn' style='border-width:medium; color:white; background-color:#00adef; border-color:#29a543'>Update</button></form>";
+
+	  						if (array_key_exists('field_Rules', $field))
+	  						{
+	  							echo "<hr>";
+	  							echo "<button type='button' class='btn btn-secondary' data-toggle='modal' data-target='#rulesModal'>Field Rules <i class='fa fa-wrench'></i></button>  " . sizeof($field['field_Rules']) . " Rules";
+	  						}
+	  						if(array_key_exists('values', $field))
+	  						{
+	  							echo "<hr><strong>Values</strong><br><form method='post' action='scripts/addValues.php'><ul class='list-inline'>";
+	  							echo "<li class='list-inline-item'><input class='form-control' type='textbox' placeholder='Name' name='name' size='8'></li><li class='list-inline-item'> <input class='form-control' type='textbox' placeholder='Value' name='value' size='8'></li><li class='list-inline-item'><button type='submit' class='btn btn-success fa fa-plus'></button></li></ul></form>";
 	  						}
 
-	  						echo "<button class='btn' style='border-width:medium; color:white; background-color:#00adef; border-color:#29a543'>Update</button>";
+	  						if(sizeof($field['values']) > 0)
+	  						{
+	  							
+	  							echo "<div class='container'><div class='row'><div class='col'></div><div class='col'><strong>Name</strong></div><div class='col'><strong>Value</strong></div></div>";
+	  							foreach ($field['values'] as $key => $value) 
+	  							{
+	  								echo "<div class='row'><div class='col'><form method='post' action='scripts/removeValue.php'><input type='hidden' name='valueIndex' value='" . $key . "'><button class='btn btn-danger fa fa-times-circle'></button></div>";						
+		  							foreach ($value as $key2 => $value2) 
+		  							{
+		  								echo "<div class='col'>" . $value2 . "</div>";	  	
+		  							}
+		  							echo "</div></form><hr>";
+		  						}	
+	  							echo "</div>";
+	  						}
 
 						}
   						?>
-   						</form>
+   						
 					</div>
 				</div>
 			</div>
@@ -782,7 +811,143 @@ echo key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SES
 
 <!-- End File Exists Alert Modal  -->
 
+<!-- Rules  Modal  -->
 
+<div class="modal fade bd-example-modal-lg" id="rulesModal" tabindex="-1" role="dialog" aria-labelledby="rulesModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Field Rules</h5> - 
+        <?php
+        $form = $_SESSION['form'];
+        $page = $_SESSION['form']['pages'][$_SESSION['selectedPage']];
+        $section = $page['sections'][$_SESSION['selectedSection']];
+        $field = $section['fields'][$_SESSION['selectedField']];
+         echo $page['pageName'] . "/" . $section['sectionName'] . "/" . $field['fieldName']; 
+         ?>
+       
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+       <p>
+        	<strong style="color:teal;">Note:</strong> <i style="color:teal;">Field Rules are isolated to a single field and do not support conditions on multiple fields.</i>
+    	</p>
+      <div class="modal-body">
+        <?php
+        $rules = $field['field_Rules'];
+
+        echo '<ul class="list-inline row">
+			  <li class="list-inline-item alert alert-info col" style="font-size:small">When ' . $field['fieldName'] . '</li>
+			  <li class="list-inline-item alert alert-info col" style="font-size:small">Value(s)</li>
+			  <li class="list-inline-item alert alert-info col" style="font-size:small">Perform Action</li>
+			  <li class="list-inline-item alert alert-info col" style="font-size:small">Otherwise Perform</li>
+			  <li class="list-inline-item alert alert-info col" style="font-size:small">On Field/Section</li>
+			  </ul>';
+		echo '<form method="post" action="scripts/addRules.php">
+				<ul class="list-inline row">
+				<li class="list-inline-item alert col">
+					<select class="form-control" name="when" >
+				      <option>Equals</option>
+				      <option>Does not Equal</option>				      
+				    </select>
+				</li>
+				<li class="list-inline-item alert col">
+					<select class="form-control" name="value">';
+		foreach ($field['values'] as $key => $value) {
+			echo "<option>" . $value['value'] . "</option>";
+		}
+				
+		echo	'</select>
+				</li>
+				<li class="list-inline-item alert col">
+					<select class="form-control" name="performAction">
+				      <option>Hide</option>
+				      <option>Show</option>
+				      <option>Required</option>
+				      <option>Not Required</option>
+				      <option>Enable</option>
+				      <option>Disable</option>
+				    </select>
+				</li>
+				<li class="list-inline-item alert col">
+					<select class="form-control" name="otherwisePerform">
+				      <option>Hide</option>
+				      <option>Show</option>
+				      <option>Required</option>
+				      <option>Not Required</option>
+				      <option>Enable</option>
+				      <option>Disable</option>
+				    </select>
+				</li>
+				<li class="list-inline-item alert col">
+					<select class="form-control" name="onFieldOrSection">';
+		foreach ($form['pages'] as $key => $value) 
+		{
+			echo "<li><option>" . $value['pageName'] . "</option></li>";
+			echo "<ol>";
+			foreach ($page['sections'] as $key2 => $value2) 
+			{
+				echo "<li><option>" . $value2['sectionName'] . "</option></li>";
+				echo "<ol>";
+				foreach ($section['fields'] as $key3 => $value3) 
+				{
+					echo "<li><option>" . $value3['fieldName'] . "</option><li>";
+				}
+				echo "</ol>";
+			}
+			echo "</ol>";
+		}
+
+		echo	    '</select>
+				</li>
+			 
+			  </ul>';
+		echo ' <ul class="list-inline row">
+				<li class="list-inline-item col">
+			   <button type="submit" class="btn">Add Rule <i class="fa fa-plus"></i></button>
+			   </li>
+			   </ul>			   
+			    </form>
+			    <hr>';
+        if(sizeof($rules) <= 0)
+        {
+        	echo "No rules are currently defined for this field. Click the Add Rule button below to add a rule.";
+        }
+        else
+        {
+
+        	echo "<ul class='list-inline'>";
+        	foreach($rules as $key=>$rule)
+        	{
+        		
+        		echo "<li><ul class='list-inline row'>";
+        		echo "<form method='post' action='scripts/removeRule.php'><input type='hidden' name='ruleIndex' value='" . $key . "'>";
+        		echo "<li><button type='submit' class='fa fa-times-circle btn btn-danger'></button></li>";
+        		echo "</form>";
+        		foreach($rule as $key2=>$rule2)
+        		{
+        			echo "<li class='list-inline-item alert alert-info col' style='font-size:small'>" . $rule2 . "</li>";
+        		}   
+        		echo "</ul></li>";     		
+        	}	
+        	echo "</ul></p>";
+        }
+
+
+
+        ?>
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- End Rules Modal  -->
 	
 		
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

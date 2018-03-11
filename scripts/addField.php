@@ -7,29 +7,29 @@ include 'functions.php';
 $type = $_POST['field'];
 $fieldNumber = fieldNumber();
 
-$properties = array('fieldName'=>'Field Name', 'fieldType'=>$type, 'fieldKey'=>'FieldKey', 'hideFieldLabel'=>False, 'hidden'=>False);
+$properties = array('fieldName'=>'Field Name', 'fieldType'=>$type, 'fieldKey'=>'FieldKey', 'hideFieldLabel'=>True, 'hidden'=>False);
 
 
 
 if($type == "text")
 {
-	$var = array('default_Value'=>'default', 'hint_Text'=>'hint', 'enforce_Min/max'=>False, 'minimum_Length'=>'min', 'maximum_Length'=>'max', 'fieldRules'=>'rules', 'required'=>False, 'enabled'=>False, 'capture_Time_Stamp'=>False, 'secure'=>False,);
+	$var = array('default_Value'=>'default', 'hint_Text'=>'hint', 'enforce_Min/max'=>False, 'minimum_Length'=>'min', 'maximum_Length'=>'max', 'required'=>False, 'enabled'=>False, 'capture_Time_Stamp'=>False, 'secure'=>False, 'field_Rules'=>array());
 	$properties = array_merge($properties, $var);
 }
 if($type == "listselector")
 {
-	$var = array('allow_Multi_Selection'=>False, 'field_Rules'=>'rules', 'required'=>False, 'enabled'=>False, 'capture_Time_Stamp'=>False, 'values'=>'values',);
+	$var = array('allow_Multi_Selection'=>False, 'required'=>False, 'enabled'=>False, 'capture_Time_Stamp'=>False, 'values'=>array(), 'field_Rules'=>array());
 	$properties = array_merge($properties, $var);
 }
 if($type == "statictext")
 {
-	$var = array('default_Value'=>'default', 'field_Rules'=>'rules', 'enabled'=>False, 'exclude_On_Sync'=>False,);
+	$var = array('default_Value'=>'default', 'enabled'=>False, 'exclude_On_Sync'=>False, 'field_Rules'=>array(),);
 	$properties = array_merge($properties, $var);
 }
 if($type == "numeric")
 {
 
-	$var = array('default_Value'=>'default', 'field_Rules'=>'rules', 'enabled'=>False, 'exclude_On_Sync'=>False,);
+	$var = array('default_Value'=>'default', 'enabled'=>False, 'exclude_On_Sync'=>False, 'field_Rules'=>array(),);
 
 	$properties = array_merge($properties, $var);
 }
@@ -40,12 +40,12 @@ if($type == "photo")
 }
 if($type == "optionlist")
 {
-	$var = array('number_Of_Columns_For_Phones'=>'phone', 'number_Of_Columns_For_Tablets'=>'tablet', 'memory_Field'=>'memory', 'excludeOnSync'=>False,);
+	$var = array('number_Of_Columns_For_Phones'=>'phone', 'number_Of_Columns_For_Tablets'=>'tablet', 'memory_Field'=>'memory', 'excludeOnSync'=>False,'values'=>array(), 'field_Rules'=>array());
 	$properties = array_merge($properties, $var);
 }
 if($type == "yesnona")
 {
-	$var = array('allow_N/A'=>'allow', 'default_Value'=>'default', 'field_Rules'=>'rules', 'required'=>False, 'enabled'=>False,);
+	$var = array('allow_N/A'=>'allow', 'default_Value'=>'default', 'required'=>False, 'enabled'=>False, 'field_Rules'=>array(),);
 	$properties = array_merge($properties, $var);
 }
 

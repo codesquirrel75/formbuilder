@@ -66,16 +66,30 @@ function getPropertyInput($property)
 	if(is_string($field[$property]))
 	{
 		$value = $field[$property];
-		$outPut = "<input type='textbox' size='15' name='" . $property . "' value='" . $value . "'/>";	
+		$outPut = "<input type='textbox' size='15' name='" . $property . "' value='" . $value . "'>";	
 	}
 	
 	if(is_bool($field[$property]))
 	{
-		$outPut = "<input type='checkbox' name='" . $property . "'/>";
+		$value = $field[$property];
+		//$val = "False";
+		
+		if($value)
+		{
+			$checked = "checked";
+			$val = "True";
+		}
+		else
+		{
+			$checked = "";
+		}
+
+		$outPut = "<input type='checkbox' name='" . $property . "' " . $checked . ">";
 	}
 	if(is_numeric($field[$property]))
 	{
-		$outPut = "<input type='number' name='" . $property . "' />";
+		$value = $field[$property];
+		$outPut = "<input type='number' name='" . $property . "' value='" . $value . "'>";
 	}
 	return $outPut;
 }
