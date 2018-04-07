@@ -5,6 +5,7 @@ session_start();  // start session
 $field = $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields'][$_SESSION['selectedField']] ;
 print_r($field);
 echo "<hr>";
+print_r($_POST);
 
 foreach ($field as $key => $value) 
 {
@@ -19,9 +20,9 @@ foreach ($field as $key => $value)
 			$_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields'][$_SESSION['selectedField']][$key] = $_POST[$key];
 		}
 	}
-	else
+	elseif ($value == True)
 	{
-		if(!is_array($value))
+		if(!is_array($value) && !is_string($value))
 		{
 			$_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields'][$_SESSION['selectedField']][$key] = False;			
 		}

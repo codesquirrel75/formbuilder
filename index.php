@@ -41,16 +41,6 @@ if(!isset($_SESSION['selectedSection']))
 	
 }
 
-if(!array_key_exists($_SESSION['selectedField'], $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']))
-{
-	$_SESSION['selectedField'] = key( $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']);
-}
-
-// Set field Index
-$_SESSION['fieldIndex'] = array_search($_SESSION['selectedField'],array_keys($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']));
-
-
-
 
 // Check for empty pages
 if(sizeof($_SESSION['form']['pages']) == 0)
@@ -65,6 +55,18 @@ if(sizeof($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections']) == 
 	$_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'] = array('section1'=>array('sectionName'=>'section 1', 'fields'=>array()));
 	
 }
+
+if(!array_key_exists($_SESSION['selectedField'], $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']))
+{
+	$_SESSION['selectedField'] = key( $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']);
+}
+
+// Set field Index
+$_SESSION['fieldIndex'] = array_search($_SESSION['selectedField'],array_keys($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SESSION['selectedSection']]['fields']));
+
+
+
+
 
 
 // Check for Session fields variable
@@ -751,7 +753,7 @@ echo key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SES
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form method="post" action="scripts/editSection.php">
+      <form method="post" action="scripts/editsection.php">
       <div class="modal-body">
 
       	<label>Section Name</label>
