@@ -337,38 +337,103 @@ echo key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SES
 		
 			<div class="col-md-4">
 
-<!-- Start of Card 1 (PAGES)  -->
-				<div class="card text-center">
-					  	<div class="card-header">
-					  		<div class="container">
-					  			<div class="row">
-					  				<div class="col">
-							  		<strong>Pages</strong>
-							  		</div>
-							  		<div class="col"></div>
-							  		<div class="col">
-								  										  										  		
-									    <div class="btn-group" role="group">
-									    	<form method="post" action="scripts/addPage.php">	
-										  <button type="submit" class="fa fa-plus-square btn btn-outline-primary"></button>
-											</form>	
-											<form>
-											<button type="button" class="fa fa-pencil-square-o btn btn-outline-secondary" data-toggle="modal" data-target="#editPage"></button>
-										</form>
-											<form method="post" action="scripts/removePage.php">
-										  <button type="submit" class="fa fa-minus-square btn btn-outline-danger"></button>
-											</form>
-										</div>
-										
+			<div class="container">
+				<div class="row">
+					<div class="col">
+
+						<!-- Start of Card 1 (PAGES)  -->
+						<div class="card text-center">
+							  	<div class="card-header">
+							  		<div class="container">
+							  			<div class="row">
+							  				<div class="col">
+									  		<strong>Pages</strong>
+									  		</div>
+									  		<div class="col"></div>
+									  		<div class="col">
+										  										  										  		
+											    <div class="btn-group" role="group">
+											    	<form method="post" action="scripts/addPage.php">	
+												  <button type="submit" class="fa fa-plus-square btn btn-outline-primary"></button>
+													</form>	
+													<form>
+													<button type="button" class="fa fa-pencil-square-o btn btn-outline-secondary" data-toggle="modal" data-target="#editPage"></button>
+												</form>
+													<form method="post" action="scripts/removePage.php">
+												  <button type="submit" class="fa fa-minus-square btn btn-outline-danger"></button>
+													</form>
+												</div>
+												
+											</div>
+										</div>	
 									</div>
-								</div>	
-							</div>
+								</div>
+								<div class="card-body">
+									<?php
+										foreach($_SESSION['form']['pages'] as $key=>$page)
+										{
+											if($_SESSION['selectedPage'] === $key)
+												{
+													$type = "alert-primary";
+												}
+												else
+												{
+													$type = "alert-success";
+												}
+
+										echo 
+												'<form method="post" action="scripts/selectPage.php">
+										  		<input type="hidden" name="pageIndex" value="' . $key . '">
+											  	<button type="submit" class="alert ' . $type . ' btn-lg btn-block text-left" role="alert" style="text-align: left;">
+												  <B>' . $_SESSION['form']['pages'][$key]['pageName'] . '</B>
+												</button>
+											</form>';
+										}	
+									?>
+								</div>
 						</div>
-						<div class="card-body">
-							<?php
-								foreach($_SESSION['form']['pages'] as $key=>$page)
+						<!-- End of Card 1 (PAGES)  -->
+						
+					</div>
+					
+				</div>
+				<div class="row">
+					<div class="col">
+						
+						<!-- Start of Card 3 (SECTIONS)  -->
+				<div class="card text-center">
+				  	<div class="card-header">
+				  		<div class="container">
+				  			<div class="row">
+				  				<div class="col">
+						  		<strong>Sections</strong>
+						  		</div>
+						  		<div class="col">
+						  			
+						  		</div>
+						  		<div class="col">
+								    <div class="btn-group" role="group" aria-label="Basic example">
+										<form method="post" action="scripts/addSection.php">
+									  		<button type="submit" class="fa fa-plus-square btn btn-outline-primary"></button>
+										</form>
+										<form>
+											<button type="button" class="fa fa-pencil-square-o btn btn-outline-secondary" data-toggle="modal" data-target="#editSection"></button>
+										</form>
+										<form method="post" action="scripts/removeSection.php">
+									  		<button type="submit" class="fa fa-minus-square btn btn-outline-danger"></button>
+										</form>
+
+									</div>
+								</div>
+							</div>	
+						</div>
+					</div>
+					<div class="card-body">
+					  	
+						<?php
+								foreach($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'] as $key=>$section)
 								{
-									if($_SESSION['selectedPage'] === $key)
+									if($_SESSION['selectedSection'] === $key)
 										{
 											$type = "alert-primary";
 										}
@@ -378,19 +443,27 @@ echo key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SES
 										}
 
 								echo 
-										'<form method="post" action="scripts/selectPage.php">
-								  		<input type="hidden" name="pageIndex" value="' . $key . '">
+										'<form method="post" action="scripts/selectSection.php">
+								  		<input type="hidden" name="sectionIndex" value="' . $key . '">
 									  	<button type="submit" class="alert ' . $type . ' btn-lg btn-block text-left" role="alert" style="text-align: left;">
-										  <B>' . $_SESSION['form']['pages'][$key]['pageName'] . '</B>
+										  <B>' . $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$key]['sectionName'] . '</B>
 										</button>
 									</form>';
 								}	
 							?>
-						</div>
 					</div>
-<!-- End of Card 1 (PAGES)  -->
+				</div>
+<!-- End of Card 3 (SECTIONS)  -->
+
+					</div>
+				</div>
+			</div>
+
+
 
 			</div>
+
+
 			<div class="col-md-4">
 
 <!-- Start of Card 2 (FIELDS)  -->
@@ -533,7 +606,7 @@ echo key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SES
 
 	  						foreach($field as $key=>$property)
 	  						{
-	  							if(!($key != "field_Rules" xor $key !="values"))
+	  							if(!($key != "field_Rules" xor $key !="values" xor $key =="fieldType"))
 	  							{
 		  							$propertyInput = getPropertyInput($key);
 		  							echo "<strong>" . strtoupper($key) . "</strong> " . $propertyInput . "<br>";
@@ -552,22 +625,23 @@ echo key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SES
 	  						{
 	  							echo "<hr><strong>Values</strong><br><form method='post' action='scripts/addValues.php'><ul class='list-inline'>";
 	  							echo "<li class='list-inline-item'><input class='form-control' type='textbox' placeholder='Name' name='name' size='8'></li><li class='list-inline-item'> <input class='form-control' type='textbox' placeholder='Value' name='value' size='8'></li><li class='list-inline-item'><button type='submit' class='btn btn-success fa fa-plus'></button></li></ul></form>";
-	  						}
+	  						
 
-	  						if(sizeof($field['values']) > 0)
-	  						{
-	  							
-	  							echo "<div class='container'><div class='row'><div class='col'></div><div class='col'><strong>Name</strong></div><div class='col'><strong>Value</strong></div></div>";
-	  							foreach ($field['values'] as $key => $value) 
-	  							{
-	  								echo "<div class='row'><div class='col'><form method='post' action='scripts/removeValue.php'><input type='hidden' name='valueIndex' value='" . $key . "'><button class='btn btn-danger fa fa-times-circle'></button></div>";						
-		  							foreach ($value as $key2 => $value2) 
+		  						if(sizeof($field['values']) > 0)
+		  						{
+		  							
+		  							echo "<div class='container'><div class='row'><div class='col'></div><div class='col'><strong>Name</strong></div><div class='col'><strong>Value</strong></div></div>";
+		  							foreach ($field['values'] as $key => $value) 
 		  							{
-		  								echo "<div class='col'>" . $value2 . "</div>";	  	
-		  							}
-		  							echo "</div></form><hr>";
-		  						}	
-	  							echo "</div>";
+		  								echo "<div class='row'><div class='col'><form method='post' action='scripts/removeValue.php'><input type='hidden' name='valueIndex' value='" . $key . "'><button class='btn btn-danger fa fa-times-circle'></button></div>";						
+			  							foreach ($value as $key2 => $value2) 
+			  							{
+			  								echo "<div class='col'>" . $value2 . "</div>";	  	
+			  							}
+			  							echo "</div></form><hr>";
+			  						}	
+		  							echo "</div>";
+		  						}
 	  						}
 
 						}
@@ -586,60 +660,7 @@ echo key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SES
 		<div class="row">
 			<div class="col-md-4">
 
-<!-- Start of Card 3 (SECTIONS)  -->
-				<div class="card text-center">
-				  	<div class="card-header">
-				  		<div class="container">
-				  			<div class="row">
-				  				<div class="col">
-						  		<strong>Sections</strong>
-						  		</div>
-						  		<div class="col">
-						  			
-						  		</div>
-						  		<div class="col">
-								    <div class="btn-group" role="group" aria-label="Basic example">
-										<form method="post" action="scripts/addSection.php">
-									  		<button type="submit" class="fa fa-plus-square btn btn-outline-primary"></button>
-										</form>
-										<form>
-											<button type="button" class="fa fa-pencil-square-o btn btn-outline-secondary" data-toggle="modal" data-target="#editSection"></button>
-										</form>
-										<form method="post" action="scripts/removeSection.php">
-									  		<button type="submit" class="fa fa-minus-square btn btn-outline-danger"></button>
-										</form>
 
-									</div>
-								</div>
-							</div>	
-						</div>
-					</div>
-					<div class="card-body">
-					  	
-						<?php
-								foreach($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'] as $key=>$section)
-								{
-									if($_SESSION['selectedSection'] === $key)
-										{
-											$type = "alert-primary";
-										}
-										else
-										{
-											$type = "alert-success";
-										}
-
-								echo 
-										'<form method="post" action="scripts/selectSection.php">
-								  		<input type="hidden" name="sectionIndex" value="' . $key . '">
-									  	<button type="submit" class="alert ' . $type . ' btn-lg btn-block text-left" role="alert" style="text-align: left;">
-										  <B>' . $_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$key]['sectionName'] . '</B>
-										</button>
-									</form>';
-								}	
-							?>
-					</div>
-				</div>
-<!-- End of Card 3 (SECTIONS)  -->
 			</div>	
 		</div>	
 		
