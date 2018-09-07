@@ -8,7 +8,7 @@ include 'scripts/functions.php';
 // Check for the page setup array
 if(!isset($_SESSION['form']['pages']))
 {
-	$_SESSION['form'] = array('formName'=>'form' . (sizeof(scandir('forms'))-1), 'pages'=>array('page' . pageNumber() =>array('pageName'=>'page' . pageNumber(), 'sections'=>array('section' . sectionNumber() =>array('sectionName'=>'section' . sectionNumber(), 'fields'=>array())))));
+	$_SESSION['form'] = array('formName'=>'form' . (sizeof(scandir('forms'))-2), 'pages'=>array('page' . pageNumber() =>array('pageName'=>'page' . pageNumber(), 'sections'=>array('section' . sectionNumber() =>array('sectionName'=>'section' . sectionNumber(), 'fields'=>array())))));
 
 	$_SESSION['selectedPage'] = key($_SESSION['form']['pages']);
 	$_SESSION['pageIndex'] = array_search($_SESSION['selectedPage'],array_keys($_SESSION['form']['pages']));
@@ -83,8 +83,9 @@ $formName = $_SESSION['form']['formName'];
 
 //   Testing outputs 
 
+
+
 /*
-echo "<br>";
 echo "<strong>size of page sections</strong>";
 print_r($_SESSION['form']);
 
@@ -121,6 +122,8 @@ echo key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SES
 
 		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
 		
 	</head>
 	
@@ -130,7 +133,7 @@ echo key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SES
 <!-- Start of Nav Bar -->
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 	  		<a class="navbar-brand" href="#" style="color:Turquoise">
-	  			<img src="pics/logo.jpg" width="50" height="50" alt=""> <strong>FORM BUILDER</strong>
+	  			<img src="pics/logo.jpg" width="50" height="50" alt=""> <strong style="font-size:40px;">FORM BUILDER</strong>
 	  		</a>
 	  		<div class="container">
 	  		<!--
@@ -291,43 +294,85 @@ echo key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SES
 
 							<div class="col-md-3">	
 								<form class="form-inline my-2 my-lg-0" method="post" action="scripts/searchForms.php">
-								<!-- Example single danger button -->
-								<div class="btn-group">
-								  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								    Select Form
-								  </button>
-								  <div class="dropdown-menu">
+								<!-- open or preview form -->
+									<div class="btn-group">
 
-								  	<?php  
-								  		
+										<div class="dropdown">
+											<button id="formDropDwn" type="button" class="btn btn-danger dropdown-toggle fa fa-folder" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										    open Form
+											</button>
+											
+											<div class="dropdown-menu" aria-labelledby="formDropDwn">
 
-								  		if(sizeof($forms) > 2)
-								  		{
-									  		foreach ($forms as $form) 
-									  		{
-												$formToPrint = substr($form, 0, strpos($form, "."));
+											  	<?php  
+											  		
 
-												if(strlen($formToPrint) > 0)
-												{
-													echo '<a class="dropdown-item" href="#">' . $formToPrint . '</a>';
-												}
-											}
-										}
-										else
-										{
-											echo '<a class="dropdown-item" href="#">No Saved Forms</a>';
-										}	
-								  	?>
-								   
-								  </div>
-								</div>
-								
-						      		
-						      		<button class="btn btn-outline-success my-2 my-sm-0 fa fa-folder-open" type="submit"></button>
+											  		if(sizeof($forms) > 3)
+											  		{
+												  		foreach ($forms as $form) 
+												  		{
+															$formToPrint = substr($form, 0, strpos($form, "."));
+
+															if(strlen($formToPrint) > 0 && $formToPrint != "index")
+															{
+																echo '<a class="dropdown-item" href=# onclick="setForm(' . $form . ')">' . $formToPrint . '</a>';
+																
+															}
+														}
+													}
+													else
+													{
+														echo '<a class="dropdown-item" href="#">No Saved Forms</a>';
+													}	
+											  	?>
+										</div>
+									  
+									   
+									  </div>
+
+									<div class="dropdown">
+										<button id="formDropDwn" type="button" class="btn btn-outline-primary fa fa-eye dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									    preview
+										</button>
+
+										<div class="dropdown-menu" aria-labelledby="formDropDwn">
+
+											  	<?php  
+											  		
+
+											  		if(sizeof($forms) > 3)
+											  		{
+												  		foreach ($forms as $form) 
+												  		{
+															$formToPrint = substr($form, 0, strpos($form, "."));
+
+															if(strlen($formToPrint) > 0 && $formToPrint != "index")
+															{
+																
+																echo '<a class="dropdown-item" onclick="window.open(\'forms/' . $form . '\', \'preview\', \'_blank\')">' . $formToPrint . '</a>';
+															}
+														}
+													}
+													else
+													{
+														echo '<a class="dropdown-item" href="#">No Saved Forms</a>';
+													}	
+											  	?>
+										</div>
+
+									</div>
+									  
+									  
+									</div>
+						 
 						    	</form>
+
 							</div>
-						</div>	
-				    </div>	
+
+						</div>
+
+				    </div>
+
 				</div>
 		
 <!-- End of Forms Tool bar  -->
@@ -971,8 +1016,19 @@ echo key($_SESSION['form']['pages'][$_SESSION['selectedPage']]['sections'][$_SES
 </div>
 
 <!-- End Rules Modal  -->
+
+		<!-- Page Script -->
+<script type="text/javascript">
 	
-		
+	function setForm(){
+		document.getElementById("formDropDwn").innerHTML = "Whoop!";
+		document.getElementById("viewForm").href = "forms/form1.html";
+	}
+
+</script>
+
+
+<!--  Boot Strap Scripts -->		
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
