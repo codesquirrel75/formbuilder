@@ -1,6 +1,7 @@
 <?php
 session_start();  // start session
 
+include("saveFunctions.php");
 
 $formName = $_POST['formName'];
 
@@ -27,15 +28,43 @@ $form = '<!DOCTYPE html>
 			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 		</head>
 
-		<body>' . $formName . "\n" ;
+		<body><div class="alert alert-info"><strong>' . $formName . "</strong></div>\n" ;
 
 foreach($_SESSION['form']['pages'] as $key=>$page)
 {
-	$form = $form . $page['pageName'] . "\n";
+	$form = $form . '<hr>' . "\n";
 	foreach ($_SESSION['form']['pages'][$key]['sections'] as $key2 => $section) {
-		$form = $form . "<" . $section['sectionName'] . ">\n";
+		
+		$form = $form . "<hr><strong>" . $section['sectionName'] . "</strong>\n";
 		foreach ($_SESSION['form']['pages'][$key]['sections'][$key2]['fields'] as $key3 => $field) {
-			$form = $form . $field['fieldName'] . "\n";
+			
+			if($field['fieldType'] === "numeric")
+			{
+				
+				$form = $form . numericInput() . "\n";
+			}
+			elseif ($field['fieldType'] === "listselector") 
+			{	
+				$form = $form . listSelector(). "\n";
+			}
+			elseif ($field['fieldType'] === "text") 
+			{
+				$form = $form . textInput(). "\n";
+			}
+			elseif ($field['fieldType'] ==="yesnona") 
+			{
+				$form = $form . yesNoNa(). "\n";
+			}
+			elseif ($field['fieldType'] ==="statictext") 
+			{
+				$form = $form . staticText(). "\n";
+			}
+			elseif ($field['fieldType'] ==="optionlist") 
+			{
+				$form = $form . optionList(). "\n";
+			}
+
+			
 		}
 	}
 }
@@ -46,6 +75,8 @@ $form = $form . ' <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
 
 </body>
 </html>' . "\n";
+
+//echo $form;
 
 fwrite($file, $form);
 fclose($file);	
