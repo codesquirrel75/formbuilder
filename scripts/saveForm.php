@@ -41,27 +41,27 @@ foreach($_SESSION['form']['pages'] as $key=>$page)
 			if($field['fieldType'] === "numeric")
 			{
 				
-				$form = $form . numericInput() . "\n";
+				$form = $form . numericInput($field) . "\n";
 			}
 			elseif ($field['fieldType'] === "listselector") 
 			{	
-				$form = $form . listSelector(). "\n";
+				$form = $form . listSelector($feild). "\n";
 			}
 			elseif ($field['fieldType'] === "text") 
 			{
-				$form = $form . textInput(). "\n";
+				$form = $form . textInput($field). "\n";
 			}
 			elseif ($field['fieldType'] ==="yesnona") 
 			{
-				$form = $form . yesNoNa(). "\n";
+				$form = $form . yesNoNa($field). "\n";
 			}
 			elseif ($field['fieldType'] ==="statictext") 
 			{
-				$form = $form . staticText(). "\n";
+				$form = $form . staticText($field). "\n";
 			}
 			elseif ($field['fieldType'] ==="optionlist") 
 			{
-				$form = $form . optionList(). "\n";
+				$form = $form . optionList($field). "\n";
 			}
 
 			
@@ -77,11 +77,12 @@ $form = $form . ' <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
 </html>' . "\n";
 
 //echo $form;
-
+/*
 fwrite($file, $form);
 fclose($file);	
 
 header("Location:../index.php");
+*/		
 ?>
 
 

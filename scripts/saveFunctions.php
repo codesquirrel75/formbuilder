@@ -1,18 +1,35 @@
 <?php
 
 
-function optionList()
+function optionList($args)
 {
-	$optionList = '<h3>Selection title AKA the Question:</h3>
-		<select class="btn btn-lg btn-block btn-primary">
+	$optionList = '<div id="ol' . $args['fieldName'] . '" hidden><h3>' . $args['fieldName'] . '</h3>';
+	echo $args['fieldName'];
+
+	$optionList = $optionList . '<select class="btn btn-lg btn-block btn-primary">';
+	foreach ($args['values'] as $key => $value) 
+	{
+		
+			$optionList = $optionList . '<option>' . $value['name'] . '</option>';
+			print_r($value);
+			
+	}
+		$optionList = $optionList . '</select></div>' ;
+		echo "<p>";
+		echo $optionList;
+		echo "</p>";
+
+	/*$optionList = '<h3>' . $args[fieldName] . '</h3>';
+		'<select class="btn btn-lg btn-block btn-primary">
 			<option>select me</option>
 			<option>No Select me</option>
 		</select>' ;
 
 	return $optionList;
+	*/
 }
 
-function listSelector()
+function listSelector($args)
 {
 	$listSelector = '<h3>Option List Question:</h3>
 		<input type="radio" name="list1" value="selection1">Selection 1
@@ -26,7 +43,7 @@ function listSelector()
 	return $listSelector;
 }
 
-function numericInput()
+function numericInput($args)
 {
 	$numericInput = '<h3>Numeric input Question:</h3>
 		<input type="Numeric" name="number">';
@@ -34,14 +51,14 @@ function numericInput()
 	return $numericInput;
 }
 
-function staticText()
+function staticText($args)
 {
 	$staticText = '<h3>I am static text.</h3>';
 
 	return $staticText;
 }
 
-function textInput()
+function textInput($args)
 {
 	$textInput = '<h3>Text input Question:</h3>
 		<input type="text" name="text" required="true">';
@@ -49,7 +66,7 @@ function textInput()
 	return $textInput;
 }
 
-function yesNoNa()
+function yesNoNa($args)
 {
 	$yesNoNa = '<h3>Yes/No/NA Question:</h3>
 		Yes<input type="radio" name="yes/no" value="yes">
